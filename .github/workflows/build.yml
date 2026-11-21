@@ -1,0 +1,18 @@
+name: Build and analyse plugin
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    uses: AxolotlBucketLabs/DevTools/.github/workflows/build-plugin.yml@v4.1.1
+    with:
+      php-version: "8.4"
+      pm-version-major: "5"
+      axolotl-ref: "9e2572ebe272efdc85e74e42e6da27ed4b94a828"
+      phpstan: max
