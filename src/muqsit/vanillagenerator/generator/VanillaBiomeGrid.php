@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace muqsit\vanillagenerator\generator;
 
+use LogicException;
 use muqsit\vanillagenerator\generator\biomegrid\BiomeGrid;
 use pocketmine\world\format\Chunk;
 use function array_key_exists;
@@ -16,6 +17,10 @@ class VanillaBiomeGrid implements BiomeGrid{
 	public function getBiome(int $x, int $z) : ?int{
 		// upcasting is very important to get extended biomes
 		return array_key_exists($hash = $x | $z << Chunk::COORD_BIT_SIZE, $this->biomes) ? $this->biomes[$hash] & 0xFF : null;
+	}
+
+	public function getRequiredBiome(int $x, int $z) : int{
+		return $this->getBiome($x, $z) ?? throw new LogicException("Biome data is missing at x={$x}, z={$z}.");
 	}
 
 	public function setBiome(int $x, int $z, int $biome_id) : void{

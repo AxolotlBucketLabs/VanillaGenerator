@@ -95,23 +95,23 @@ class OverworldGenerator extends VanillaGenerator{
 		}
 	}
 
-	protected const COORDINATE_SCALE = 684.412;
-	protected const HEIGHT_SCALE = 684.412;
-	protected const HEIGHT_NOISE_SCALE_X = 200.0;
-	protected const HEIGHT_NOISE_SCALE_Z = 200.0;
-	protected const DETAIL_NOISE_SCALE_X = 80.0;
-	protected const DETAIL_NOISE_SCALE_Y = 160.0;
-	protected const DETAIL_NOISE_SCALE_Z = 80.0;
-	protected const SURFACE_SCALE = 0.0625;
-	protected const BASE_SIZE = 8.5;
-	protected const STRETCH_Y = 12.0;
-	protected const BIOME_HEIGHT_OFFSET = 0.0;
-	protected const BIOME_HEIGHT_WEIGHT = 1.0;
-	protected const BIOME_SCALE_OFFSET = 0.0;
-	protected const BIOME_SCALE_WEIGHT = 1.0;
-	protected const DENSITY_FILL_MODE = 0;
-	protected const DENSITY_FILL_SEA_MODE = 0;
-	protected const DENSITY_FILL_OFFSET = 0.0;
+	protected const float COORDINATE_SCALE = 684.412;
+	protected const float HEIGHT_SCALE = 684.412;
+	protected const float HEIGHT_NOISE_SCALE_X = 200.0;
+	protected const float HEIGHT_NOISE_SCALE_Z = 200.0;
+	protected const float DETAIL_NOISE_SCALE_X = 80.0;
+	protected const float DETAIL_NOISE_SCALE_Y = 160.0;
+	protected const float DETAIL_NOISE_SCALE_Z = 80.0;
+	protected const float SURFACE_SCALE = 0.0625;
+	protected const float BASE_SIZE = 8.5;
+	protected const float STRETCH_Y = 12.0;
+	protected const float BIOME_HEIGHT_OFFSET = 0.0;
+	protected const float BIOME_HEIGHT_WEIGHT = 1.0;
+	protected const float BIOME_SCALE_OFFSET = 0.0;
+	protected const float BIOME_SCALE_WEIGHT = 1.0;
+	protected const int DENSITY_FILL_MODE = 0;
+	protected const int DENSITY_FILL_SEA_MODE = 0;
+	protected const float DENSITY_FILL_OFFSET = 0.0;
 
 	private GroundGenerator $ground_gen;
 	private string $type = WorldType::NORMAL;
@@ -152,7 +152,7 @@ class OverworldGenerator extends VanillaGenerator{
 		$max_y = $world->getMaxY();
 		for($x = 0; $x < $size_x; ++$x){
 			for($z = 0; $z < $size_z; ++$z){
-				$id = $grid->getBiome($x, $z);
+				$id = $grid->getRequiredBiome($x, $z);
 				for($y = $min_y; $y < $max_y; ++$y){
 					$chunk->setBiomeId($x, $y, $z, $id);
 				}
@@ -194,7 +194,14 @@ class OverworldGenerator extends VanillaGenerator{
 	}
 
 	protected function generateRawTerrain(ChunkManager $world, int $chunk_x, int $chunk_z) : void{
-		$density = $this->generateTerrainDensity($chunk_x, $chunk_z);
+		$min_y = $world->getMinY();
+		$max_y = $world->getMaxY();
+		$world_height = $max_y - $min_y;
+		if($world_height <= 0 || $world_height % 8 !== 0){
+			throw new \InvalidArgumentException("World height must be a positive multiple of 8.");
+		}
+		$vertical_sample_count = intdiv($world_height, 8) + 1;
+		$density = $this->generateTerrainDensity($chunk_x, $chunk_z, $min_y, $vertical_sample_count);
 
 		$sea_level = 64;
 
@@ -202,10 +209,10 @@ class OverworldGenerator extends VanillaGenerator{
 		// default)
 		// so it's needed to re-scale it. Linear interpolation is used to fill in the gaps.
 
-		$fill = self::DENSITY_FILL_MODE;
+		$fill = static::DENSITY_FILL_MODE;
 		$afill = abs($fill);
-		$sea_fill = self::DENSITY_FILL_SEA_MODE;
-		$density_offset = self::DENSITY_FILL_OFFSET;
+		$sea_fill = static::DENSITY_FILL_SEA_MODE;
+		$density_offset = static::DENSITY_FILL_OFFSET;
 
 		$still_water = VanillaBlocks::WATER()->getStillForm()->getStateId();
 		$water = VanillaBlocks::WATER()->getFlowingForm()->getStateId();
@@ -216,7 +223,7 @@ class OverworldGenerator extends VanillaGenerator{
 
 		for($i = 0; $i < 5 - 1; ++$i){
 			for($j = 0; $j < 5 - 1; ++$j){
-				for($k = 0; $k < 33 - 1; ++$k){
+				for($k = 0; $k < $vertical_sample_count - 1; ++$k){
 					// 2x2 grid
 					$d1 = $density[self::densityHash($i, $j, $k)];
 					$d2 = $density[self::densityHash($i + 1, $j, $k)];
@@ -231,8 +238,8 @@ class OverworldGenerator extends VanillaGenerator{
 						$d9 = $d1;
 						$d10 = $d3;
 
-						$y_pos = $l + ($k << 3);
-						$y_block_pos = $y_pos & 0xf;
+						$y_pos = $min_y + $l + ($k << 3);
+						$y_block_pos = $y_pos & Chunk::COORD_MASK;
 						$sub_chunk = $chunk->getSubChunk($y_pos >> Chunk::COORD_BIT_SIZE);
 
 						for($m = 0; $m < 4; ++$m){
@@ -295,7 +302,7 @@ class OverworldGenerator extends VanillaGenerator{
 	 * @param int $z
 	 * @return float[]
 	 */
-	protected function generateTerrainDensity(int $x, int $z) : array{
+	protected function generateTerrainDensity(int $x, int $z, int $min_y, int $vertical_sample_count) : array{
 		$density = [];
 
 		// Scaling chunk x and z coordinates (4x, see below)
@@ -337,6 +344,9 @@ class OverworldGenerator extends VanillaGenerator{
 		// required to
 		// re-scale it and do linear interpolation before densities can be used to generate raw
 		// terrain.
+		$min_vertical_sample = intdiv($min_y, 8);
+		$top_fade_start = $vertical_sample_count - 4;
+
 		for($i = 0; $i < 5; ++$i){
 			for($j = 0; $j < 5; ++$j){
 				$avg_height_scale = 0.0;
@@ -385,10 +395,11 @@ class OverworldGenerator extends VanillaGenerator{
 				}
 
 				$noise_h = ($noise_h * 0.2 + $avg_height_base) * self::BASE_SIZE / 8.0 * 4.0 + self::BASE_SIZE;
-				for($k = 0; $k < 33; ++$k){
+				for($k = 0; $k < $vertical_sample_count; ++$k){
 					// density should be lower and lower as we climb up, this gets a height value to
 					// subtract from the noise.
-					$nh = ($k - $noise_h) * self::STRETCH_Y * 128.0 / 256.0 / $avg_height_scale;
+					$vertical_sample = $min_vertical_sample + $k;
+					$nh = ($vertical_sample - $noise_h) * self::STRETCH_Y * 128.0 / 256.0 / $avg_height_scale;
 					if($nh < 0.0){
 						$nh *= 4.0;
 					}
@@ -401,8 +412,8 @@ class OverworldGenerator extends VanillaGenerator{
 					$dens = $noise_d < 0 ? $noise_r : ($noise_d > 1 ? $noise_r_2 : $noise_r + ($noise_r_2 - $noise_r) * $noise_d);
 					$dens -= $nh;
 					++$index;
-					if($k > 29){
-						$lowering = ($k - 29) / 3.0;
+					if($k > $top_fade_start){
+						$lowering = ($k - $top_fade_start) / 3.0;
 						// linear interpolation
 						$dens = $dens * (1.0 - $lowering) + -10.0 * $lowering;
 					}
