@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace muqsit\vanillagenerator\generator\overworld\decorator;
 
 use Exception;
+use LogicException;
 use muqsit\vanillagenerator\generator\Decorator;
 use muqsit\vanillagenerator\generator\object\tree\GenericTree;
 use muqsit\vanillagenerator\generator\overworld\decorator\types\TreeDecoration;
@@ -39,6 +40,23 @@ class TreeDecorator extends Decorator{
 		return null;
 	}
 
+	/**
+	 * @param class-string<GenericTree> $class
+	 * @devtools-allow-dynamic-class $class
+	 */
+	private static function createTree(string $class, Random $random, BlockTransaction $transaction) : GenericTree{
+		if($class === GenericTree::class){
+			return new GenericTree($random, $transaction);
+		}
+		if(!class_exists($class)){
+			throw new LogicException("Tree class {$class} does not exist.");
+		}
+		if(!is_subclass_of($class, GenericTree::class)){
+			throw new LogicException("Tree class {$class} must extend " . GenericTree::class . ".");
+		}
+		return new $class($random, $transaction);
+	}
+
 	/** @var TreeDecoration[] */
 	private array $trees = [];
 
@@ -66,8 +84,7 @@ class TreeDecorator extends Decorator{
 		if($class !== null && $source_y !== null){
 			$txn = new BlockTransaction($world);
 			try{
-				/** @var GenericTree $tree */
-				$tree = new $class($random, $txn);
+				$tree = self::createTree($class, $random, $txn);
 			}catch(Exception $ex){
 				$tree = new GenericTree($random, $txn);
 			}
