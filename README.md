@@ -1,5 +1,9 @@
 # VanillaGenerator
 
+[![Discord](https://img.shields.io/discord/1568295845374206052?label=Discord&logo=discord&logoColor=white&color=5865F2)](https://discord.gg/Pk4FrNvHnM)
+[![Build](https://github.com/AxolotlBucketLabs/VanillaGenerator/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/AxolotlBucketLabs/VanillaGenerator/actions/workflows/build.yml)
+[![License](https://img.shields.io/github/license/AxolotlBucketLabs/VanillaGenerator?label=License)](LICENSE)
+
 VanillaGenerator adds the `vanilla_overworld` and `vanilla_nether` world generators to PocketMine-MP. The generator is ported from [Glowstone](https://github.com/GlowstoneMC/Glowstone), and its license notices are preserved in [LICENSE](LICENSE).
 
 ## Requirements
