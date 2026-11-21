@@ -35,7 +35,7 @@ class SurfaceCaveDecorator extends Decorator{
 		for($i = 0, $noise_c = count($noise); $i < $noise_c; ++$i){
 			$angles[$i] = 360.0 * $noise[$i];
 		}
-		$section_count = count($angles) / 2;
+		$section_count = intdiv(count($angles), 2);
 		$nodes = [];
 		$start_block_pos = new Vector3($cx + $start_cx, $start_y, $cz + $start_cz);
 		$current_node = $start_block_pos->asVector3();
@@ -46,11 +46,11 @@ class SurfaceCaveDecorator extends Decorator{
 			$delta_y = -abs((int) floor($noise[$i] * $length));
 			$delta_x = (int) floor((float) $length * cos(deg2rad($yaw)));
 			$delta_z = (int) floor((float) $length * sin(deg2rad($yaw)));
-			$current_node = new Vector3($delta_x, $delta_y, $delta_z);
-			$node[] = $current_node->floor();
+			$current_node = $current_node->add($delta_x, $delta_y, $delta_z);
+			$nodes[] = $current_node->floor();
 		}
 		foreach($nodes as $node){
-			if($node->y < 4){
+			if($node->getFloorY() < 4){
 				continue;
 			}
 
@@ -60,9 +60,9 @@ class SurfaceCaveDecorator extends Decorator{
 
 	private function caveAroundRay(ChunkManager $world, Vector3 $block, Random $random) : void{
 		$radius = $random->nextBoundedInt(2) + 2;
-		$block_x = $block->x;
-		$block_y = $block->y;
-		$block_z = $block->z;
+		$block_x = $block->getFloorX();
+		$block_y = $block->getFloorY();
+		$block_z = $block->getFloorZ();
 		for($x = $block_x - $radius; $x <= $block_x + $radius; ++$x){
 			for($y = $block_y - $radius; $y <= $block_y + $radius; ++$y){
 				for($z = $block_z - $radius; $z <= $block_z + $radius; ++$z){

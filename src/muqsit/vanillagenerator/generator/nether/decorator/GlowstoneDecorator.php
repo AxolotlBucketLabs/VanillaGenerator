@@ -55,7 +55,7 @@ class GlowstoneDecorator extends Decorator{
 				$vector = new Vector3($x, $y, $z);
 				foreach(self::SIDES as $face){
 					$pos = $vector->getSide($face);
-					if($world->getBlockAt($pos->x, $pos->y, $pos->z)->getTypeId() === BlockTypeIds::GLOWSTONE){
+					if($world->getBlockAt($pos->getFloorX(), $pos->getFloorY(), $pos->getFloorZ())->getTypeId() === BlockTypeIds::GLOWSTONE){
 						++$glowstone_block_count;
 					}
 				}

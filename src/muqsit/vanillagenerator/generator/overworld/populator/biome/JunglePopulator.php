@@ -58,6 +58,9 @@ class JunglePopulator extends BiomePopulator{
 			$x = $random->nextBoundedInt(16);
 			$z = $random->nextBoundedInt(16);
 			$y = $chunk->getHighestBlockAt($x, $z);
+			if($y === null){
+				continue;
+			}
 			$delegate = new BlockTransaction($world);
 			$bush = new JungleBush($random, $delegate);
 			if($bush->generate($world, $random, $source_x + $x, $y, $source_z + $z)){

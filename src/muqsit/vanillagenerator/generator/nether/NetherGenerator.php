@@ -22,14 +22,17 @@ use pocketmine\world\format\Chunk;
  */
 class NetherGenerator extends VanillaGenerator{
 
-	protected const COORDINATE_SCALE = 684.412;
-	protected const HEIGHT_SCALE = 2053.236;
-	protected const HEIGHT_NOISE_SCALE_X = 100.0;
-	protected const HEIGHT_NOISE_SCALE_Z = 100.0;
-	protected const DETAIL_NOISE_SCALE_X = 80.0;
-	protected const DETAIL_NOISE_SCALE_Y = 60.0;
-	protected const DETAIL_NOISE_SCALE_Z = 80.0;
-	protected const SURFACE_SCALE = 0.0625;
+	protected const float COORDINATE_SCALE = 684.412;
+	protected const float HEIGHT_SCALE = 2053.236;
+	protected const float HEIGHT_NOISE_SCALE_X = 100.0;
+	protected const float HEIGHT_NOISE_SCALE_Z = 100.0;
+	protected const float DETAIL_NOISE_SCALE_X = 80.0;
+	protected const float DETAIL_NOISE_SCALE_Y = 60.0;
+	protected const float DETAIL_NOISE_SCALE_Z = 80.0;
+	protected const float SURFACE_SCALE = 0.0625;
+
+	/** @var array<int, array<int, float>> */
+	private static array $vertical_noise = [];
 
 	/**
 	 * @param int $i 0-4
@@ -84,7 +87,7 @@ class NetherGenerator extends VanillaGenerator{
 		$max_y = $world->getMaxY();
 		for($x = 0; $x < 16; ++$x){
 			for($z = 0; $z < 16; ++$z){
-				$id = $biomes->getBiome($x, $z);
+				$id = $biomes->getRequiredBiome($x, $z);
 				for($y = $min_y; $y < $max_y; ++$y){
 					$chunk->setBiomeId($x, $y, $z, $id);
 				}
@@ -201,7 +204,7 @@ class NetherGenerator extends VanillaGenerator{
 
 		$k_max = $octaves->detail->size_y;
 
-		static $nv = null;
+		$nv = self::$vertical_noise[$k_max] ?? null;
 		if($nv === null){
 			$nv = [];
 			for($i = 0; $i < $k_max; ++$i){
@@ -212,6 +215,7 @@ class NetherGenerator extends VanillaGenerator{
 					$nv[$i] -= $nh * $nh * $nh * 10.0;
 				}
 			}
+			self::$vertical_noise[$k_max] = $nv;
 		}
 
 		$index = 0;

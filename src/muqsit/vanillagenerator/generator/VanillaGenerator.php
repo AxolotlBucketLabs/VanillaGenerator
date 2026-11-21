@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace muqsit\vanillagenerator\generator;
 
+use LogicException;
 use muqsit\vanillagenerator\generator\biomegrid\MapLayer;
 use muqsit\vanillagenerator\generator\biomegrid\utils\MapLayerPair;
 use muqsit\vanillagenerator\generator\overworld\WorldType;
@@ -40,7 +41,11 @@ abstract class VanillaGenerator extends Generator{
 	 * @return int[]
 	 */
 	public function getBiomeGridAtLowerRes(int $x, int $z, int $size_x, int $size_z) : array{
-		return $this->biome_grid->low_resolution->generateValues($x, $z, $size_x, $size_z);
+		$layer = $this->biome_grid->low_resolution;
+		if($layer === null){
+			throw new LogicException("This generator preset has no lower-resolution biome map.");
+		}
+		return $layer->generateValues($x, $z, $size_x, $size_z);
 	}
 
 	/**

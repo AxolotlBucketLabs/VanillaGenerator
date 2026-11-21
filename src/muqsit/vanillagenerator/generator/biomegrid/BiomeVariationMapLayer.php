@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace muqsit\vanillagenerator\generator\biomegrid;
 
+use LogicException;
 use muqsit\vanillagenerator\generator\overworld\biome\BiomeIds;
 use ReflectionClass;
 use function array_key_exists;
@@ -39,7 +40,9 @@ class BiomeVariationMapLayer extends MapLayer{
 	public static function init() : void{
 		self::$BIOMES = [];
 		foreach((new ReflectionClass(BiomeIds::class))->getConstants() as $const => $biomeId){
-			self::$BIOMES[$biomeId] = $const;
+			if(is_int($biomeId)){
+				self::$BIOMES[$biomeId] = $const;
+			}
 		}
 	}
 
@@ -103,7 +106,11 @@ class BiomeVariationMapLayer extends MapLayer{
 		$grid_size_z = $size_z + 2;
 
 		$values = $this->below_layer->generateValues($grid_x, $grid_z, $grid_size_x, $grid_size_z);
-		$variation_values = $this->variation_layer->generateValues($grid_x, $grid_z, $grid_size_x, $grid_size_z);
+		$variation_layer = $this->variation_layer;
+		if($variation_layer === null){
+			throw new LogicException("This biome map has no variation layer.");
+		}
+		$variation_values = $variation_layer->generateValues($grid_x, $grid_z, $grid_size_x, $grid_size_z);
 
 		$final_values = [];
 		for($i = 0; $i < $size_z; ++$i){

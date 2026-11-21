@@ -19,6 +19,9 @@ class StoneBoulderDecorator extends Decorator{
 			$x = $source_x + $random->nextBoundedInt(16);
             $z = $source_z + $random->nextBoundedInt(16);
             $y = $chunk->getHighestBlockAt($x & Chunk::COORD_MASK, $z & Chunk::COORD_MASK);
+			if($y === null){
+				continue;
+			}
 			(new StoneBoulder())->generate($world, $random, $x, $y, $z);
         }
 	}

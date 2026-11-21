@@ -15,6 +15,7 @@ use pocketmine\world\BlockTransaction;
 use pocketmine\world\ChunkManager;
 use pocketmine\world\World;
 use function array_key_exists;
+use function array_fill_keys;
 
 class GenericTree extends TerrainObject{
 
@@ -23,7 +24,7 @@ class GenericTree extends TerrainObject{
 	protected Wood $log_type;
 	protected Leaves $leaves_type;
 
-	/** @var int[] */
+	/** @var array<int, true> */
 	protected array $overridables;
 
 	/**
@@ -71,7 +72,7 @@ class GenericTree extends TerrainObject{
 	}
 
 	final protected function setOverridables(int ...$overridables) : void{
-		$this->overridables = array_flip($overridables);
+		$this->overridables = array_fill_keys($overridables, true);
 	}
 
 	final protected function setHeight(int $height) : void{
@@ -90,10 +91,10 @@ class GenericTree extends TerrainObject{
 	 * Checks whether this tree fits under the upper world limit.
 	 * @param int $base_height the height of the base of the trunk
 	 *
-	 * @return bool whether this tree can grow without exceeding block height 255; false otherwise.
+	 * @return bool whether this tree can grow within the world's vertical bounds.
 	 */
 	public function canHeightFit(int $base_height) : bool{
-		return $base_height >= 1 && $base_height + $this->height + 1 < World::Y_MAX;
+		return $base_height >= World::Y_MIN + 1 && $base_height + $this->height + 1 < World::Y_MAX;
 	}
 
 	/**
@@ -124,10 +125,11 @@ class GenericTree extends TerrainObject{
 				default => 1 // default radius if above first block
 			};
 			// check for block collision on horizontal slices
-			$height = $world->getMaxY();
+			$min_height = $world->getMinY();
+			$max_height = $world->getMaxY();
 			for($x = $base_x - $radius; $x <= $base_x + $radius; ++$x){
 				for($z = $base_z - $radius; $z <= $base_z + $radius; ++$z){
-					if($y >= 0 && $y < $height){
+					if($y >= $min_height && $y < $max_height){
 						// we can overlap some blocks around
 						if(!array_key_exists($world->getBlockAt($x, $y, $z)->getTypeId(), $this->overridables)){
 							return false;

@@ -13,7 +13,7 @@ class BiomeThinEdgeMapLayer extends MapLayer{
 	/** @var int[] */
 	private static array $OCEANS = [BiomeIds::OCEAN, BiomeIds::DEEP_OCEAN];
 
-	/** @var int[] */
+	/** @var array<int, int> */
 	private static array $MESA_EDGES = [
 		BiomeIds::MESA => BiomeIds::DESERT,
 		BiomeIds::MESA_BRYCE => BiomeIds::DESERT,
@@ -23,7 +23,7 @@ class BiomeThinEdgeMapLayer extends MapLayer{
 		BiomeIds::MESA_PLATEAU_MUTATED => BiomeIds::DESERT
 	];
 
-	/** @var int[] */
+	/** @var array<int, int> */
 	private static array $JUNGLE_EDGES = [
 		BiomeIds::JUNGLE => BiomeIds::JUNGLE_EDGE,
 		BiomeIds::JUNGLE_HILLS => BiomeIds::JUNGLE_EDGE,

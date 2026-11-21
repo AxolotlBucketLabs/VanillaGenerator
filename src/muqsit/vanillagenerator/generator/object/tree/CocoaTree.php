@@ -110,7 +110,7 @@ class CocoaTree extends JungleTree{
 					if($random->nextBoundedInt(count(self::COCOA_FACES) - $y) === 0){ // higher it is, more chances there is
 						$size = self::COCOA_SIZE[$random->nextBoundedInt(count(self::COCOA_SIZE))];
 						$block = (new Vector3($source_x, $source_y + $this->height - 5 + $y, $source_z))->getSide($cocoa_face);
-						$this->transaction->addBlockAt($block->x, $block->y, $block->z, VanillaBlocks::COCOA_POD()->setFacing($cocoa_face)->setAge($size));
+						$this->transaction->addBlockAt($block->getFloorX(), $block->getFloorY(), $block->getFloorZ(), VanillaBlocks::COCOA_POD()->setFacing($cocoa_face)->setAge($size));
 					}
 				}
 			}

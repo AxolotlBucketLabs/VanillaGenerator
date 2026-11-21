@@ -85,7 +85,9 @@ class OverworldPopulator implements Populator{
 		}
 
 		foreach($biomes as $biome){
-			$this->biome_populators[$biome] = $populator;
+			if(is_int($biome)){
+				$this->biome_populators[$biome] = $populator;
+			}
 		}
 	}
 }

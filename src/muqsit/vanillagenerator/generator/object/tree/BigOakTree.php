@@ -113,7 +113,7 @@ class BigOakTree extends GenericTree{
 			for($i = 0; $i <= $max_distance; ++$i, ++$n){
 				$target = $from->add(0.5 + $i * $dx, 0.5 + $i * $dy, 0.5 + $i * $dz);
 				$target_floorY = $target->getFloorY();
-				if($target_floorY < 0 || $target_floorY > $height || !array_key_exists($world->getBlockAt($target->getFloorX(), $target->getFloorY(), $target->getFloorZ())->getTypeId(), $this->overridables)){
+				if($target_floorY < $world->getMinY() || $target_floorY >= $height || !array_key_exists($world->getBlockAt($target->getFloorX(), $target_floorY, $target->getFloorZ())->getTypeId(), $this->overridables)){
 					return $n;
 				}
 			}
@@ -131,11 +131,11 @@ class BigOakTree extends GenericTree{
 	 */
 	private function generateLeafNodes(int $block_x, int $block_y, int $block_z, ChunkManager $world, Random $random) : array{
 		$leaf_nodes = [];
-		$y = $block_y + $this->height = $this->max_leaf_distance;
+		$y = $block_y + $this->height - $this->max_leaf_distance;
 		$trunk_top_y = $block_y + $this->trunk_height;
 		$leaf_nodes[] = new LeafNode($block_x, $y, $block_z, $trunk_top_y);
 
-		$node_count = (int) (1.382 + ((static::LEAF_DENSITY * (float) ($this->height / 13.0)) ** 2.0));
+		$node_count = (int) (1.382 + ((self::LEAF_DENSITY * ($this->height / 13.0)) ** 2.0));
 		$node_count = $node_count < 1 ? 1 : $node_count;
 
 		for($l = --$y - $block_y; $l >= 0; --$l, --$y){

@@ -34,7 +34,11 @@ class IceDecorator extends Decorator{
 		for($i = 0; $i < 3; ++$i){
 			$x = $source_x + $random->nextBoundedInt(16);
 			$z = $source_z + $random->nextBoundedInt(16);
-			$y = $chunk->getHighestBlockAt($x & Chunk::COORD_MASK, $z & Chunk::COORD_MASK) - 1;
+			$highest_y = $chunk->getHighestBlockAt($x & Chunk::COORD_MASK, $z & Chunk::COORD_MASK);
+			if($highest_y === null){
+				continue;
+			}
+			$y = $highest_y - 1;
 			while($y > 2 && $world->getBlockAt($x, $y, $z)->getTypeId() === BlockTypeIds::AIR){
 				--$y;
 			}
@@ -47,6 +51,9 @@ class IceDecorator extends Decorator{
 			$x = $source_x + $random->nextBoundedInt(16);
 			$z = $source_z + $random->nextBoundedInt(16);
 			$y = $chunk->getHighestBlockAt($x & Chunk::COORD_MASK, $z & Chunk::COORD_MASK);
+			if($y === null){
+				continue;
+			}
 			while($y > 2 && $world->getBlockAt($x, $y, $z)->getTypeId() === BlockTypeIds::AIR){
 				--$y;
 			}

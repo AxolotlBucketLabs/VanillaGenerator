@@ -156,7 +156,7 @@ class OverworldGenerator extends VanillaGenerator{
 				for($y = $min_y; $y < $max_y; ++$y){
 					$chunk->setBiomeId($x, $y, $z, $id);
 				}
-				if($id !== null && array_key_exists($id, self::$GROUND_MAP)){
+				if(array_key_exists($id, self::$GROUND_MAP)){
 					self::$GROUND_MAP[$id]->generateTerrainColumn($world, $this->random, $cx + $x, $cz + $z, $id, $surface_noise[$x | $z << Chunk::COORD_BIT_SIZE]);
 				}else{
 					$this->ground_gen->generateTerrainColumn($world, $this->random, $cx + $x, $cz + $z, $id, $surface_noise[$x | $z << Chunk::COORD_BIT_SIZE]);

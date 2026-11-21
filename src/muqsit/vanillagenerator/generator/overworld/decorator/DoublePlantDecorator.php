@@ -47,6 +47,9 @@ class DoublePlantDecorator extends Decorator{
 		$source_y = $random->nextBoundedInt($chunk->getHighestBlockAt($x, $z) + 32);
 
 		$species = self::getRandomDoublePlant($random, $this->doublePlants);
+		if($species === null){
+			return;
+		}
 		(new DoubleTallPlant($species))->generate($world, $random, ($chunk_x << Chunk::COORD_BIT_SIZE) + $x, $source_y, ($chunk_z << Chunk::COORD_BIT_SIZE) + $z);
 	}
 }

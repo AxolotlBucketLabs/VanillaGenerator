@@ -10,28 +10,28 @@ use function array_key_exists;
 
 class BiomeEdgeMapLayer extends MapLayer{
 
-	/** @var int[] */
+	/** @var array<int, int> */
 	private static array $MESA_EDGES = [
 		BiomeIds::MESA_PLATEAU_STONE => BiomeIds::MESA,
 		BiomeIds::MESA_PLATEAU => BiomeIds::MESA
 	];
 
-	/** @var int[] */
+	/** @var array<int, int> */
 	private static array $MEGA_TAIGA_EDGES = [
 		BiomeIds::MEGA_TAIGA => BiomeIds::TAIGA
 	];
 
-	/** @var int[] */
+	/** @var array<int, int> */
 	private static array $DESERT_EDGES = [
 		BiomeIds::DESERT => BiomeIdS::EXTREME_HILLS_PLUS_TREES
 	];
 
-	/** @var int[] */
+	/** @var array<int, int> */
 	private static array $SWAMP1_EDGES = [
 		BiomeIds::SWAMPLAND => BiomeIds::PLAINS
 	];
 
-	/** @var int[] */
+	/** @var array<int, int> */
 	private static array $SWAMP2_EDGES = [
 		BiomeIds::SWAMPLAND => BiomeIds::JUNGLE_EDGE
 	];

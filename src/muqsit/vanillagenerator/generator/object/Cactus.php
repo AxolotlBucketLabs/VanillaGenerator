@@ -34,7 +34,7 @@ class Cactus extends TerrainObject{
 				if(($type_below === BlockTypeIds::SAND || $type_below === BlockTypeIds::CACTUS) && $world->getBlockAt($source_x, $n + 1, $source_z)->getTypeId() === BlockTypeIds::AIR){
 					foreach(self::FACES as $face){
 						$face = $vec->getSide($face);
-						if($world->getBlockAt($face->x, $face->y, $face->z)->isSolid()){
+						if($world->getBlockAt($face->getFloorX(), $face->getFloorY(), $face->getFloorZ())->isSolid()){
 							return $n > $source_y;
 						}
 					}

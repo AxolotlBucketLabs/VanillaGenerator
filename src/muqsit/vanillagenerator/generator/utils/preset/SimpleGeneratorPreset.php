@@ -89,6 +89,9 @@ final class SimpleGeneratorPreset implements GeneratorPreset{
 	public function toString() : string{
 		$string = "";
 		foreach($this->data as $property => $value){
+			if(!is_string($value) && !is_int($value) && !is_float($value)){
+				throw new InvalidArgumentException("{$property} must be a string or number");
+			}
 			$string .= "{$property}={$value},";
 		}
 		return rtrim($string, ",");

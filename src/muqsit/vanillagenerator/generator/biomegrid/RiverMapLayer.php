@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace muqsit\vanillagenerator\generator\biomegrid;
 
+use LogicException;
 use muqsit\vanillagenerator\generator\overworld\biome\BiomeIds;
 use function array_key_exists;
 
@@ -80,8 +81,12 @@ class RiverMapLayer extends MapLayer{
 	 * @return int[]
 	 */
 	private function mergeRivers(int $x, int $z, int $size_x, int $size_z) : array{
+		$merge_layer = $this->merge_layer;
+		if($merge_layer === null){
+			throw new LogicException("This river map has no merge layer.");
+		}
 		$values = $this->below_layer->generateValues($x, $z, $size_x, $size_z);
-		$merge_values = $this->merge_layer->generateValues($x, $z, $size_x, $size_z);
+		$merge_values = $merge_layer->generateValues($x, $z, $size_x, $size_z);
 
 		$final_values = [];
 		for($i = 0; $i < $size_x * $size_z; ++$i){

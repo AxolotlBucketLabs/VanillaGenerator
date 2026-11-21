@@ -44,7 +44,7 @@ class SimplexNoiseGenerator extends BasePerlinNoiseGenerator{
 	];
 
 	protected static float $offset_w;
-	private static ?SimplexNoiseGenerator $instance;
+	private static SimplexNoiseGenerator $instance;
 
 	/**
 	 * @return SimplexNoiseGenerator
@@ -293,7 +293,7 @@ class SimplexNoiseGenerator extends BasePerlinNoiseGenerator{
 		$jj = $j & 255;
 		$kk = $k & 255;
 		$gi0 = $this->perm[$ii + $this->perm[$jj + $this->perm[$kk]]] % 12;
-		$gi1 = $this->perm[$ii + $i1 + $this->perm[$jj + $$j1 + $this->perm[$kk + $k1]]] % 12;
+		$gi1 = $this->perm[$ii + $i1 + $this->perm[$jj + $j1 + $this->perm[$kk + $k1]]] % 12;
 		$gi2 = $this->perm[$ii + $i2 + $this->perm[$jj + $j2 + $this->perm[$kk + $k2]]] % 12;
 		$gi3 = $this->perm[$ii + 1 + $this->perm[$jj + 1 + $this->perm[$kk + 1]]] % 12;
 

@@ -63,7 +63,7 @@ class TreeDecorator extends Decorator{
 		$source_y = $chunk->getHighestBlockAt($x, $z);
 
 		$class = self::getRandomTree($random, $this->trees);
-		if($class !== null){
+		if($class !== null && $source_y !== null){
 			$txn = new BlockTransaction($world);
 			try{
 				/** @var GenericTree $tree */

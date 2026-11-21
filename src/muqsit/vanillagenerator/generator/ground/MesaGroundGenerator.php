@@ -115,7 +115,7 @@ class MesaGroundGenerator extends GroundGenerator{
 								$world->setBlockAt($x, $y, $z, $top_mat);
 							}elseif($y > $sea_level + 2 + $surface_height){
 								$color = $this->getLayerColor($y, $color_noise_offset);
-								$this->setColoredGroundLayer($world, $x, $y, $z, $y < $sea_level || $y > 128 ? DyeColor::ORANGE : ($colored ? $color : null));
+								$this->setColoredGroundLayer($world, $x, $y, $z, $y > 128 ? DyeColor::ORANGE : ($colored ? $color : null));
 							}else{
 								$world->setBlockAt($x, $y, $z, $this->top_material);
 								$ground_set = true;
@@ -180,7 +180,11 @@ class MesaGroundGenerator extends GroundGenerator{
 			if($j >= count($this->color_layer)){
 				break;
 			}
-			if(($random->nextBoundedInt(2) === 0) || (($j < count($this->color_layer) - 1) && ($random->nextBoundedInt(2) === 0))){
+			$use_light_gray = $random->nextBoolean();
+			if($j < count($this->color_layer) - 1 && !$use_light_gray){
+				$use_light_gray = $random->nextBoolean();
+			}
+			if($use_light_gray){
 				$this->color_layer[$j - 1] = DyeColor::LIGHT_GRAY;
 			}else{
 				$this->color_layer[$j] = DyeColor::WHITE;
