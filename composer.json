@@ -1,0 +1,52 @@
+{
+  "name": "muqsit/vanillagenerator",
+  "description": "Vanilla generator ported to PocketMine as a library",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "AxolotlBucketLabs"
+    },
+    {
+      "name": "Muqsit"
+    },
+    {
+      "name": "VixikHD",
+      "email": "dev@vixikhd.me"
+    }
+  ],
+  "require": {
+    "php": "^8.4",
+    "pocketmine/pocketmine-mp": "^5.0.0"
+  },
+  "require-dev": {
+    "axolotl-pm/pocketmine-mp": "5.51.2"
+  },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/axolotl-pm/PocketMine-MP",
+      "no-api": true
+    }
+  ],
+  "config": {
+    "allow-plugins": false,
+    "platform": {
+      "php": "8.4.0"
+    },
+    "sort-packages": true
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "autoload": {
+    "psr-4": {
+      "muqsit\\vanillagenerator\\": "src/muqsit/vanillagenerator/"
+    }
+  },
+  "extra": {
+    "virion": {
+      "spec": "3.0",
+      "namespace-root": "muqsit\\vanillagenerator"
+    }
+  }
+}

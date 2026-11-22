@@ -1,0 +1,7 @@
+name: VanillaGenerator
+antigen: muqsit\vanillagenerator
+api: 5.8.0
+php: "8.4"
+version: 0.0.6
+author: Muqsit
+authors: [AxolotlBucketLabs, VixikHD]

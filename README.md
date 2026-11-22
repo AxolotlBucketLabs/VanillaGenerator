@@ -39,6 +39,10 @@ To build locally, run the DevTools CLI from the project root:
 php -d phar.readonly=0 /path/to/DevTools/bin/devtools.php build --project=. --out=build
 ```
 
+## Use as a virion
+
+The repository also provides the generator classes as a virion for plugins that call them directly. Add `muqsit/vanillagenerator` from this repository to the consumer's Composer dependencies, then declare `VanillaGenerator` in its `devtools.yml`. The standalone plugin remains useful when a server needs the generator registrations without bundling the classes into another plugin.
+
 ## License
 
 VanillaGenerator is distributed under the MIT License. See [LICENSE](LICENSE) for the notices and terms.
