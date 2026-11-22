@@ -1,7 +1,7 @@
 name: VanillaGenerator
 main: muqsit\vanillagenerator\Loader
 api: 5.8.0
-version: 0.0.4
+version: 0.0.6
 author: Muqsit
 authors: [AxolotlBucketLabs]
 github: https://github.com/Muqsit

@@ -1,7 +1,8 @@
 # VanillaGenerator
 
 [![Build](https://github.com/AxolotlBucketLabs/VanillaGenerator/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/AxolotlBucketLabs/VanillaGenerator/actions/workflows/build.yml)
-[![License](https://img.shields.io/github/license/AxolotlBucketLabs/VanillaGenerator?label=License)](LICENSE)
+[![Latest release](https://img.shields.io/github/v/release/AxolotlBucketLabs/VanillaGenerator)](https://github.com/AxolotlBucketLabs/VanillaGenerator/releases/latest)
+[![License](https://img.shields.io/badge/License-MIT-blue)](LICENSE)
 [![Discord](https://img.shields.io/discord/1568295845374206052?label=Discord&logo=discord&logoColor=white&color=5865F2)](https://discord.gg/Pk4FrNvHnM)
 
 VanillaGenerator adds the `vanilla_overworld` and `vanilla_nether` world generators to Axolotl-PM. The generator is ported from [Glowstone](https://github.com/GlowstoneMC/Glowstone), and its license notices are preserved in [LICENSE](LICENSE).
@@ -13,7 +14,7 @@ VanillaGenerator adds the `vanilla_overworld` and `vanilla_nether` world generat
 
 ## Install
 
-Download the PHAR from a successful run of the **Build and analyse plugin** workflow. Copy the PHAR into the server's `plugins/` directory, then restart the server.
+Download `VanillaGenerator.phar` from the [latest GitHub release](https://github.com/AxolotlBucketLabs/VanillaGenerator/releases/latest). Copy it into the server's `plugins/` directory, then restart the server.
 
 ## Choose a world generator
 
