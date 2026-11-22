@@ -167,13 +167,3 @@ class BigOakTree extends GenericTree{
 		return $leaf_nodes;
 	}
 }
-
-final class LeafNode{
-
-	public function __construct(
-		public int $x,
-		public int $y,
-		public int $z,
-		public int $branch_y
-	){}
-}
