@@ -39,9 +39,7 @@
   "minimum-stability": "dev",
   "prefer-stable": true,
   "autoload": {
-    "psr-4": {
-      "muqsit\\vanillagenerator\\": "src/muqsit/vanillagenerator/"
-    }
+    "classmap": ["src"]
   },
   "extra": {
     "virion": {
